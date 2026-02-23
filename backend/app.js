@@ -21,7 +21,7 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-// ❌ DO NOT USE protect globally
+
 
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);

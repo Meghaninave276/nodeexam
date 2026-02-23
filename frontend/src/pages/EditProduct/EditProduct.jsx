@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { updateProduct, getMyProducts } from "../../services/productService";
+import "./EditProduct.css";
 
 const EditProduct = () => {
   const { id } = useParams();
@@ -46,43 +47,46 @@ const EditProduct = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Edit Product</h2>
+    <div className="edit-container">
+      <form className="edit-form" onSubmit={handleSubmit}>
+        <h2>Edit Product</h2>
 
-      <input
-        placeholder="Name"
-        value={form.name}
-        onChange={(e) =>
-          setForm({ ...form, name: e.target.value })
-        }
-      />
+        <input
+          placeholder="Name"
+          value={form.name}
+          onChange={(e) =>
+            setForm({ ...form, name: e.target.value })
+          }
+        />
 
-      <input
-        placeholder="Price"
-        value={form.price}
-        onChange={(e) =>
-          setForm({ ...form, price: e.target.value })
-        }
-      />
+        <input
+          type="number"
+          placeholder="Price"
+          value={form.price}
+          onChange={(e) =>
+            setForm({ ...form, price: e.target.value })
+          }
+        />
 
-      <input
-        placeholder="Description"
-        value={form.description}
-        onChange={(e) =>
-          setForm({ ...form, description: e.target.value })
-        }
-      />
+        <textarea
+          placeholder="Description"
+          value={form.description}
+          onChange={(e) =>
+            setForm({ ...form, description: e.target.value })
+          }
+        />
 
-      <input
-        placeholder="Category ID"
-        value={form.category}
-        onChange={(e) =>
-          setForm({ ...form, category: e.target.value })
-        }
-      />
+        <input
+          placeholder="Category ID"
+          value={form.category}
+          onChange={(e) =>
+            setForm({ ...form, category: e.target.value })
+          }
+        />
 
-      <button type="submit">Update</button>
-    </form>
+        <button type="submit">Update Product</button>
+      </form>
+    </div>
   );
 };
 

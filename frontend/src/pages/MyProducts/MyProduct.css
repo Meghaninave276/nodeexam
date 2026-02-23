@@ -1,0 +1,38 @@
+/* Page Wrapper */
+.myproducts-container {
+  padding: 40px 60px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+}
+
+/* Title */
+.myproducts-title {
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 28px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Grid Layout */
+.myproducts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+}
+
+/* Hover animation */
+.myproducts-grid > * {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.myproducts-grid > *:hover {
+  transform: translateY(-5px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .myproducts-container {
+    padding: 20px;
+  }
+}

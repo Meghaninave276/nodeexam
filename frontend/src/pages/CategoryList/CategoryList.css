@@ -1,0 +1,103 @@
+/* Page Background */
+.category-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #1f1c2c, #928dab);
+  padding: 20px;
+}
+
+/* Card */
+.category-card {
+  background: #ffffff;
+  padding: 35px;
+  border-radius: 10px;
+  width: 450px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.category-card h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #333;
+}
+
+/* Input + Add Button */
+.category-input-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.category-input-group input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.category-input-group input:focus {
+  outline: none;
+  border-color: #928dab;
+  box-shadow: 0 0 5px rgba(146, 141, 171, 0.5);
+}
+
+.category-input-group button {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #1f1c2c, #928dab);
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.category-input-group button:hover {
+  opacity: 0.9;
+}
+
+/* Category List */
+.category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.category-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f4f4f4;
+  padding: 10px 15px;
+  border-radius: 6px;
+  transition: 0.3s;
+}
+
+.category-item:hover {
+  background: #e8e8e8;
+}
+
+.delete-btn {
+  background: #ff4d4d;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.delete-btn:hover {
+  background: #e60000;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .category-card {
+    width: 100%;
+    padding: 20px;
+  }
+}

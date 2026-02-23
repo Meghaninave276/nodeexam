@@ -1,7 +1,8 @@
 import { useState, useContext } from "react";
 import { loginUser } from "../../services/authService";
 import { AuthContext } from "../../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import "./Login.css";
 
 const Login = () => {
   const [form, setForm] = useState({
@@ -20,34 +21,43 @@ const Login = () => {
       setUser(res.data.user);
       navigate("/");
     } catch (err) {
-      console.log(err.response?.data?.message);
       alert(err.response?.data?.message);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        name="email"
-        placeholder="Email"
-        value={form.email}
-        onChange={(e) =>
-          setForm({ ...form, [e.target.name]: e.target.value })
-        }
-      />
+    <div className="login-container">
+      <form className="login-form" onSubmit={handleSubmit}>
+        <h2>Welcome Back</h2>
 
-      <input
-        name="password"
-        type="password"
-        placeholder="Password"
-        value={form.password}
-        onChange={(e) =>
-          setForm({ ...form, [e.target.name]: e.target.value })
-        }
-      />
+        <input
+          name="email"
+          type="email"
+          placeholder="Email"
+          value={form.email}
+          onChange={(e) =>
+            setForm({ ...form, [e.target.name]: e.target.value })
+          }
+        />
 
-      <button type="submit">Login</button>
-    </form>
+        <input
+          name="password"
+          type="password"
+          placeholder="Password"
+          value={form.password}
+          onChange={(e) =>
+            setForm({ ...form, [e.target.name]: e.target.value })
+          }
+        />
+
+        <button type="submit">Login</button>
+
+        <p className="signup-text">
+          Don't have an account?{" "}
+          <Link to="/register">Sign up</Link>
+        </p>
+      </form>
+    </div>
   );
 };
 

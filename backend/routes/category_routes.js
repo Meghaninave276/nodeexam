@@ -7,12 +7,8 @@ import {
 
 const router = express.Router();
 
-// ✅ PUBLIC ROUTE
 router.get("/", getCategories);
 
-// 🔐 PROTECTED ROUTES (if needed later)
-// router.post("/", protect, addCategory);
-// router.delete("/:id", protect, deleteCategory);
 
 router.post("/", addCategory);
 router.delete("/:id", deleteCategory);

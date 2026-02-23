@@ -37,7 +37,7 @@ export const deleteProduct = async (req, res) => {
   await productcollection.findByIdAndDelete(req.params.id);
   res.json({ message: "Product Deleted" });
 };
-// ✅ Update Product (Owner Only)
+
 export const updateProduct = async (req, res) => {
   try {
     const { name, price, description, category, image } = req.body;

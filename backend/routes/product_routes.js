@@ -10,10 +10,8 @@ import {
 
 const router = express.Router();
 
-// ✅ PUBLIC
 router.get("/", getAllProducts);
 
-// 🔐 PROTECTED
 router.get("/my", protect, getMyProducts);
 router.post("/", protect, addProduct);
 router.delete("/:id", protect, deleteProduct);

@@ -1,0 +1,75 @@
+/* Page Background */
+.register-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #1f1c2c, #928dab);
+}
+
+/* Form Card */
+.register-form {
+  background: #ffffff;
+  padding: 40px 35px;
+  border-radius: 10px;
+  width: 350px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.register-form h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #333;
+}
+
+/* Inputs */
+.register-form input {
+  padding: 12px;
+  margin-bottom: 18px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.register-form input:focus {
+  outline: none;
+  border-color: #928dab;
+  box-shadow: 0 0 5px rgba(146, 141, 171, 0.5);
+}
+
+/* Button */
+.register-form button {
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #1f1c2c, #928dab);
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.register-form button:hover {
+  opacity: 0.9;
+  transform: scale(1.02);
+}
+
+/* Signin link */
+.signin-text {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.signin-text a {
+  color: #928dab;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.signin-text a:hover {
+  text-decoration: underline;
+}
