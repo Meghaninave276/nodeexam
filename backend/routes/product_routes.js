@@ -1,17 +1,22 @@
 import express from "express";
-import {  renderEditForm,createProduct, updateProduct, deleteProduct, getAllProducts, getMyProducts } from "../controllers/product_controller.js";
-import { requireAuth } from "../middlewares/auth_middleware.js";
-
-
+import { protect } from "../middlewares/auth_middleware.js";
+import {
+  addProduct,
+  deleteProduct,
+  getAllProducts,
+  getMyProducts,
+  updateProduct,
+} from "../controllers/product_controller.js";
 
 const router = express.Router();
 
+// ✅ PUBLIC
 router.get("/", getAllProducts);
-router.get("/my", requireAuth,getMyProducts );
-router.get("/add", requireAuth, renderEditForm);
-router.post("/add", requireAuth, createProduct);
-router.get("/edit/:id", requireAuth, renderEditForm);
-router.post("/edit/:id", requireAuth, updateProduct);
-router.get("/delete/:id", requireAuth, deleteProduct);
+
+// 🔐 PROTECTED
+router.get("/my", protect, getMyProducts);
+router.post("/", protect, addProduct);
+router.delete("/:id", protect, deleteProduct);
+router.put("/:id", protect, updateProduct);
 
 export default router;

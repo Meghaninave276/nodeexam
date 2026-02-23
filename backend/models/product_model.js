@@ -2,13 +2,31 @@ import mongoose from "mongoose";
 
 const productSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
-    description: { type: String },
-    price: { type: Number, required: true },
-    category: { type: mongoose.Schema.Types.ObjectId, ref: "categories", required: true },
-    user: { type: mongoose.Schema.Types.ObjectId, ref: "users", required: true }, 
+    name: {
+      type: String,
+      required: true,
+    },
+      
+    price: {
+      type: Number,
+      required: true,
+    },
+    description: String,
+
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+    },
+    image: String ,
+     
   },
+ 
   { timestamps: true }
 );
 
-export const Productcollection = mongoose.model("products", productSchema);
+export const productcollection =  mongoose.model("Product", productSchema);

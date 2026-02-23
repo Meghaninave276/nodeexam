@@ -1,34 +1,65 @@
-import React, { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import ProductList from "./components/ProductList/ProductList";
-import MyProducts from "./components/MyProducts/MyProducts";
-import ProductForm from "./components/ProductForm/ProductForm";
-import CategoryList from "./components/CategoryList/CategoryList";
-import Signin from "./pages/Signin/Signin";
-import Signup from "./pages/Signup/Signup";
-import axios from "axios";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar/Navbar";
+import Login from "./pages/Login/Login";
+import Register from "./pages/Register/Register";
+import ProductList from "./pages/ProductList/ProductList";
+import MyProducts from "./pages/MyProducts/MyProducts";
+import ProductForm from "./pages/ProductForm/ProductForm";
+import CategoryList from "./pages/CategoryList/CategoryList";
+import EditProduct from "./pages/EditProduct/EditProduct"; // ✅ IMPORT
+import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 
-export default function App() {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:2776/api/me", { withCredentials: true })
-      .then((res) => setUser(res.data.user))
-      .catch(() => setUser(null));
-  }, []);
-
+function App() {
   return (
-    <BrowserRouter>
+    <Router>
+      <Navbar />
       <Routes>
-        <Route path="/" element={<ProductList user={user} setUser={setUser} />} />
-        <Route path="/products/my" element={<MyProducts user={user} setUser={setUser} />} />
-        <Route path="/products/add" element={<ProductForm user={user} setUser={setUser} />} />
-        <Route path="/products/edit/:id" element={<ProductForm user={user} setUser={setUser} />} />
-        <Route path="/categories" element={<CategoryList user={user} setUser={setUser} />} />
-        <Route path="/login" element={<Signin setUser={setUser} />} />
-        <Route path="/register" element={<Signup />} />
+        <Route path="/" element={<ProductList />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
+        {/* ✅ My Products */}
+        <Route
+          path="/my-products"
+          element={
+            <PrivateRoute>
+              <MyProducts />
+            </PrivateRoute>
+          }
+        />
+
+        {/* ✅ Add Product */}
+        <Route
+          path="/add-product"
+          element={
+            <PrivateRoute>
+              <ProductForm />
+            </PrivateRoute>
+          }
+        />
+
+        {/* ✅ Categories */}
+        <Route
+          path="/categories"
+          element={
+            <PrivateRoute>
+              <CategoryList />
+            </PrivateRoute>
+          }
+        />
+
+        {/* ✅ Edit Product (Protected) */}
+        <Route
+          path="/edit-product/:id"
+          element={
+            <PrivateRoute>
+              <EditProduct />
+            </PrivateRoute>
+          }
+        />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
+
+export default App;

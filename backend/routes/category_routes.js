@@ -1,14 +1,20 @@
 import express from "express";
-
-import { requireAdmin, requireAuth } from "../middlewares/auth_middleware.js";
-import { addCategory, deleteCategory, getCategory } from "../controllers/category_conroller.js";
-
-
+import {
+  addCategory,
+  deleteCategory,
+  getCategories,
+} from "../controllers/category_conroller.js";
 
 const router = express.Router();
 
-router.get("/", getCategory);
-router.post("/add", requireAuth, requireAdmin, addCategory);
-router.get("/delete/:id", requireAuth, requireAdmin, deleteCategory);
+// ✅ PUBLIC ROUTE
+router.get("/", getCategories);
+
+// 🔐 PROTECTED ROUTES (if needed later)
+// router.post("/", protect, addCategory);
+// router.delete("/:id", protect, deleteCategory);
+
+router.post("/", addCategory);
+router.delete("/:id", deleteCategory);
 
 export default router;

@@ -1,98 +1,63 @@
+import { productcollection } from "../models/product_model.js";
 import { usercollection } from "../models/user_model.js";
-import { categorycollection } from "../models/category_model.js";
-import { Productcollection } from "../models/product_model.js";
+
+export const addProduct = async (req, res) => {
+  const { name, price, description, category } = req.body;
+
+  const product = await productcollection.create({
+    name,
+    price,
+    description,
+    category,
+    user: req.user._id,
+  });
+
+  req.user.products.push(product._id);
+  await req.user.save();
+
+  res.status(201).json(product);
+};
+
 export const getAllProducts = async (req, res) => {
-  try {
-    const products = await Productcollection.find()
-      .populate("category")
-      .populate("user", "username");
-    res.json({ status: 200, message: "All products fetched", products });
-  } catch (err) {
-    res.status(500).json({ status: 500, message: err.message });
-  }
+  const products = await productcollection.find()
+    .populate("user", "username")
+    .populate("category", "name");
+
+  res.json(products);
 };
 
 export const getMyProducts = async (req, res) => {
-  try {
-    if (!req.user) return res.status(401).json({ status: 401, message: "Not authenticated" });
+  const products = await productcollection.find({ user: req.user._id })
+    .populate("category", "name");
 
-    const products = await Productcollection.find({ user: req.user.userid }).populate("category");
-    res.json({ status: 200, message: "My products fetched", products });
-  } catch (err) {
-    res.status(500).json({ status: 500, message: err.message });
-  }
+  res.json(products);
 };
-export const createProduct = async (req, res) => {
-  try {
-    const { name, description, price, category } = req.body;
-    const product = await Product.create({
-      name,
-      description,
-      price,
-      category,
-      user: req.user.userid,
-    });
 
-    
-    await User.findByIdAndUpdate(req.user.userid, { $push: { products: product._id } });
-
-    res.json({status:200,message:"product created"})
-  } catch (err) {
-    res.status(500).send(err.message);
-  }
+export const deleteProduct = async (req, res) => {
+  await productcollection.findByIdAndDelete(req.params.id);
+  res.json({ message: "Product Deleted" });
 };
-export const renderProductForm = async (req, res) => {
-  try {
-    const categories = await Category.find();
-    res.json("productForm", { categories, user: req.user });
-  } catch (err) {
-    res.status(500).send(err.message);
-  }
-};
-export const renderEditForm = async (req, res) => {
-  try {
-    const product = await Productcollection.findById(req.params.id).populate("category");
-    const categories = await categorycollection.find();
-
-    if (!product) return res.status(404).send("Product not found");
-    if (req.user.role !== "admin" && product.user.toString() !== req.user.userid)
-      return res.status(403).send("Forbidden");
-
-   return res.json("productForm", { product, categories, user: req.user });
-  } catch (err) {
-    res.status(500).send(err.message);
-  }
-};
+// ✅ Update Product (Owner Only)
 export const updateProduct = async (req, res) => {
   try {
-    const { name, description, price, category } = req.body;
-    const product = await Productcollection.findById(req.params.id);
+    const { name, price, description, category, image } = req.body;
 
-    if (!product) return res.status(404).send("Product not found");
-    if (req.user.role !== "admin" && product.user.toString() !== req.user.userid)
-      return res.status(403).send("Forbidden");
+    const product = await productcollection.findById(req.params.id);
 
-    product.name = name;
-    product.description = description;
-    product.price = price;
-    product.category = category;
-    await product.save();
-    res.json({status:200,message:"product updated"})
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
 
-  } catch (err) {
-    res.status(500).send(err.message);
-  }
-};
-export const deleteProduct = async (req, res) => {
-  try {
-    const product = await Productcollection.findById(req.params.id);
-    if (!product) return res.status(404).send("Product not found");
-    if (req.user.role !== "admin" && product.user.toString() !== req.user.userid)
-      return res.status(403).send("Forbidden");
+    product.name = name || product.name;
+    product.price = price || product.price;
+    product.description = description || product.description;
+    product.category = category || product.category;
+    product.image = image || product.image;
 
-    await product.remove();
-   res.json({status:200,message:"prdoct deleted"})
-  } catch (err) {
-    res.status(500).send(err.message);
+    const updatedProduct = await product.save();
+
+    res.json(updatedProduct);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };

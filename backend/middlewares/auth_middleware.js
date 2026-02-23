@@ -1,20 +1,20 @@
 import jwt from "jsonwebtoken";
+import { usercollection } from "../models/user_model.js";
 
-export const requireAuth = (req, res, next) => {
-  const token = req.cookies?.token;
-  if (!token) return res.redirect("/login");
-
+export const protect = async (req, res, next) => {
   try {
-    const decoded = jwt.verify(token, "46@#$$%^46");
-    req.user = decoded; // { userid, role }
-    next();
-  } catch {
-    res.redirect("/login");
-  }
-};
+    const token = req.cookies.token;
 
-// Admin-only routes
-export const requireAdmin = (req, res, next) => {
-  if (req.user.role !== "admin") return res.status(403).send("Forbidden");
-  next();
+    if (!token) {
+      return res.status(401).json({ message: "Not authorized" });
+    }
+
+    const decoded = jwt.verify(token, "4563285@#$%%^@#$");
+
+    req.user = await usercollection.findById(decoded.id).select("-password");
+
+    next();
+  } catch (error) {
+    res.status(401).json({ message: "Not authorized" });
+  }
 };

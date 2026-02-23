@@ -1,62 +1,69 @@
 import { usercollection } from "../models/user_model.js";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
+export const register = async (req, res) => {
+  const { username, email, password, role } = req.body;
 
-export const signup = async (req, res) => {
-  const { username, password, role } = req.body;
+  const userExists = await usercollection.findOne({ email });
+  if (userExists)
+    return res.status(400).json({ message: "User already exists" });
 
-  try {
-    const existingUser = await usercollection.findOne({ username });
-    if (existingUser) {
-      return res.status(400).json({ status: 400, message: "User already exists" });
-    }
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
 
-    const hashpass = await bcrypt.hash(password, 12);
-    const user = await usercollection.create({ username, password: hashpass, role });
+  await usercollection.create({
+    username,
+    email,
+    password: hashedPassword,
+    role,
+  });
 
-    return res.status(200).json({ status: 200, message: "User signup successfully", user });
-  } catch (err) {
-    return res.status(500).json({ status: 500, message: err.message });
-  }
+  res.status(201).json({ message: "User Registered" });
 };
+export const login = async (req, res) => {
+  const { email, password } = req.body;
 
-export const signin = async (req, res) => {
-  const { username, password } = req.body;
-
-  try {
-    const user = await usercollection.findOne({ username });
-    if (!user) {
-      return res.status(400).json({ status: 400, message: "User not found" });
-    }
-
-    const ispassmatch = await bcrypt.compare(password, user.password);
-    if (!ispassmatch) {
-      return res.status(400).json({ status: 400, message: "Password is incorrect" });
-    }
-
-    const token = jwt.sign(
-      { userid: user._id, role: user.role },
-      "46@#$$%^46",
-      { expiresIn: "1h" }
-    );
-
- 
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: false, 
-      sameSite: "lax", 
-      maxAge: 60 * 60 * 1000, 
-    });
-
-    return res.status(200).json({ status: 200, message: "User signin successfully", user: { username: user.username, role: user.role } });
-  } catch (err) {
-    return res.status(500).json({ status: 500, message: err.message });
+  if (!email || !password) {
+    return res
+      .status(400)
+      .json({ message: "Please provide email and password" });
   }
-};
 
+  const user = await usercollection.findOne({ email });
+
+  if (!user) {
+    return res.status(400).json({ message: "User not found" });
+  }
+
+  const isMatch = await bcrypt.compare(password, user.password);
+
+  if (!isMatch) {
+    return res.status(400).json({ message: "Invalid credentials" });
+  }
+
+  const token = jwt.sign(
+    { id: user._id },
+    "4563285@#$%%^@#$",
+    { expiresIn: "7d" }
+  );
+
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: false, // true in production
+    sameSite: "lax",
+  });
+
+  res.json({
+    user: {
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+    },
+  });
+};
 
 export const logout = (req, res) => {
-  res.clearCookie("token");
-  return res.json({ status: 200, message: "Logged out successfully" });
+  res.cookie("token", "", { maxAge: 0 });
+  res.json({ message: "Logged Out" });
 };
